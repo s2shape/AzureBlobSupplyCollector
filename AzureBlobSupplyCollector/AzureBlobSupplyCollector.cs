@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using DriveSupplyCollectorBase;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Auth;
@@ -17,14 +18,26 @@ namespace AzureBlobSupplyCollector
 
         private const string PREFIX = "azureblob://";
 
+        public AzureBlobSupplyCollector(string s2Prefix = null, int s2FolderLevels = 0, bool s2UseFileNameInDcName = false) : base(s2Prefix, s2FolderLevels, s2UseFileNameInDcName) {
+        }
+
         public override List<string> DataStoreTypes()
         {
             return (new[] { "AzureBlob" }).ToList();
         }
 
-        public string BuildConnectionString(string accountName, string accountKey, string container)
-        {
-            return $"{PREFIX}{accountName}:{accountKey}/{container}";
+        public string BuildConnectionString(string accountName, string accountKey, string container) {
+            var attrs = new StringBuilder();
+            if (s2Prefix != null) {
+                attrs.Append($",s2-prefix={s2Prefix};");
+            }
+            if (s2FolderLevels != 0) {
+                attrs.Append($",s2-folder-levels-used-in-dc-name={s2FolderLevels};");
+            }
+            if (s2UseFileNameInDcName) {
+                attrs.Append(",s2-use-file-name-in-dc-name=True;");
+            }
+            return $"{PREFIX}{accountName}:{accountKey}/{container}{attrs}";
         }
 
         private void Connect(string connectString) {
@@ -71,11 +84,8 @@ namespace AzureBlobSupplyCollector
 
             var containerRef = _blobClient.GetContainerReference(_container);
 
-            var stream = new MemoryStream();
             var blob = containerRef.GetBlockBlobReference(filePath);
-            blob.DownloadToStream(stream); //TODO: streaming?
-            stream.Position = 0;
-            return stream;
+            return blob.OpenRead();
         }
 
         protected override List<DriveFileInfo> ListDriveFiles(DataContainer container) {
@@ -84,7 +94,7 @@ namespace AzureBlobSupplyCollector
             var files = new List<DriveFileInfo>();
 
             var containerRef = _blobClient.GetContainerReference(_container);
-            var blobs = containerRef.ListBlobs("", true);
+            var blobs = containerRef.ListBlobs(s2Prefix, true);
             foreach (var item in blobs) {
                 if (item.GetType() == typeof(CloudBlockBlob))
                 {
