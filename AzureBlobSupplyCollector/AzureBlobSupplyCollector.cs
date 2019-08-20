@@ -55,10 +55,20 @@ namespace AzureBlobSupplyCollector
             var containerIndex = connectString.LastIndexOf("/");
             if (containerIndex <= 0)
                 throw new ArgumentException("Invalid connection string!");
+            var additionsIndex = connectString.IndexOf(",", containerIndex);
 
             var account = connectString.Substring(accountIndex, keyIndex - accountIndex);
             var accountKey = connectString.Substring(keyIndex + 1, containerIndex - keyIndex - 1);
-            _container = connectString.Substring(containerIndex + 1);
+            
+            if (additionsIndex > 0)
+            {
+                _container = connectString.Substring(containerIndex + 1, additionsIndex - containerIndex - 1);
+                ParseConnectionStringAdditions(connectString.Substring(additionsIndex + 1));
+            }
+            else
+            {
+                _container = connectString.Substring(containerIndex + 1);
+            }
 
             _storageAccount = new CloudStorageAccount(
                 new StorageCredentials(
