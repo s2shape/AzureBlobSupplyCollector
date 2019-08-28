@@ -1,5 +1,5 @@
 #!/bin/bash
-docker run -d -p 10000:10000 --name azurite1 --mount source=$(pwd)/AzureBlobSupplyCollectorTests/tests,target=/data,type=bind arafato/azurite
+docker run -d -p 10000:10000 --name azurite1 --mount source=$(pwd)/AzureBlobSupplyCollectorTests/tests,target=/data,type=bind mcr.microsoft.com/azure-storage/azurite
 
 echo { > AzureBlobSupplyCollectorTests/Properties/launchSettings.json
 echo   \"profiles\": { >> AzureBlobSupplyCollectorTests/Properties/launchSettings.json

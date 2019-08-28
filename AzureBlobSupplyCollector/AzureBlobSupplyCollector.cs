@@ -81,14 +81,14 @@ namespace AzureBlobSupplyCollector
             var keyIndex = connectString.IndexOf(":", accountIndex);
             if (keyIndex <= 0)
                 throw new ArgumentException("Invalid connection string!");
-            var containerIndex = connectString.LastIndexOf("/");
+            var additionsIndex = connectString.IndexOf(",", keyIndex);
+            var containerIndex = additionsIndex > 0 ? connectString.LastIndexOf("/", additionsIndex) : connectString.LastIndexOf("/");
             if (containerIndex <= 0)
                 throw new ArgumentException("Invalid connection string!");
-            var additionsIndex = connectString.IndexOf(",", containerIndex);
 
             var account = connectString.Substring(accountIndex, keyIndex - accountIndex);
             var accountKey = connectString.Substring(keyIndex + 1, containerIndex - keyIndex - 1);
-            
+
             if (additionsIndex > 0)
             {
                 _container = connectString.Substring(containerIndex + 1, additionsIndex - containerIndex - 1);
@@ -96,6 +96,7 @@ namespace AzureBlobSupplyCollector
             }
             else
             {
+                
                 _container = connectString.Substring(containerIndex + 1);
             }
 
@@ -139,8 +140,8 @@ namespace AzureBlobSupplyCollector
         protected override List<DriveFileInfo> ListDriveFiles(DataContainer container) {
             Connect(container.ConnectionString);
 
+            var containers = _blobClient.ListContainers().ToArray();
             var files = new List<DriveFileInfo>();
-
             var containerRef = _blobClient.GetContainerReference(_container);
             var blobs = containerRef.ListBlobs(s2Prefix, true);
             foreach (var item in blobs) {
