@@ -15,10 +15,12 @@ namespace AzureBlobSupplyCollector
         private CloudStorageAccount _storageAccount;
         private CloudBlobClient _blobClient;
         private string _container;
+        private string _overrideHost;
 
         private const string PREFIX = "azureblob://";
 
-        public AzureBlobSupplyCollector(string s2Prefix = null, int s2FolderLevels = 0, bool s2UseFileNameInDcName = false) : base(s2Prefix, s2FolderLevels, s2UseFileNameInDcName) {
+        public AzureBlobSupplyCollector(string s2Prefix = null, int s2FolderLevels = 0, bool s2UseFileNameInDcName = false, bool csvHasHeader = true) : base(s2Prefix, s2FolderLevels, s2UseFileNameInDcName) {
+            this.csvHasHeader = csvHasHeader;
         }
 
         public override List<string> DataStoreTypes()
@@ -37,7 +39,34 @@ namespace AzureBlobSupplyCollector
             if (s2UseFileNameInDcName) {
                 attrs.Append(",s2-use-file-name-in-dc-name=True;");
             }
+
+            if (!csvHasHeader)
+            {
+                attrs.Append(",csv_has_header=False;");
+            }
+
             return $"{PREFIX}{accountName}:{accountKey}/{container}{attrs}";
+        }
+
+        protected override void ParseConnectionStringAdditions(string additions)
+        {
+            base.ParseConnectionStringAdditions(additions);
+
+            var parts = additions.Split(",");
+            foreach (var part in parts)
+            {
+                if (String.IsNullOrEmpty(part))
+                    continue;
+
+                var pair = part.Split("=");
+                if (pair.Length == 2)
+                {
+                    if ("override_host".Equals(pair[0]))
+                    {
+                        _overrideHost = pair[1];
+                    }
+                }
+            }
         }
 
         private void Connect(string connectString) {
@@ -70,10 +99,19 @@ namespace AzureBlobSupplyCollector
                 _container = connectString.Substring(containerIndex + 1);
             }
 
-            _storageAccount = new CloudStorageAccount(
-                new StorageCredentials(
-                    account,
-                    accountKey), true);
+            if (_overrideHost != null) {
+                _storageAccount = new CloudStorageAccount(
+                    new StorageCredentials(
+                        account,
+                        accountKey), new Uri(_overrideHost), null, null, null);
+            }
+            else {
+                _storageAccount = new CloudStorageAccount(
+                    new StorageCredentials(
+                        account,
+                        accountKey), true);
+            }
+
             _blobClient = _storageAccount.CreateCloudBlobClient();
         }
 
