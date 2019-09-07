@@ -1,0 +1,35 @@
+image: microsoft/dotnet:latest
+
+stages:
+  - build
+  - test
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  AZUREBLOB_CONTAINER: testblob
+  AZUREBLOB_ACCOUNT_NAME: devstoreaccount1
+  AZUREBLOB_ACCOUNT_KEY: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+  AZUREBLOB_HOST: http://azureblob:10000/devstoreaccount1
+
+before_script:
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+  - dotnet restore
+
+build:
+  stage: build
+  script:
+    - dotnet build
+
+test:
+  stage: test
+  services:
+    - name: itsplus/s2shape-azureblob-test
+      alias: azureblob
+
+  script:
+    - dotnet build
+    - cd DriveSupplyCollectorBase
+    - dotnet test
+    - cd ..
+    - dotnet test

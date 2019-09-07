@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureBlobSupplyCollector", "AzureBlobSupplyCollector\AzureBlobSupplyCollector.csproj", "{4F1BEDA3-3439-46D7-8F73-699DC4ECF61A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DriveSupplyCollectorBase", "..\DriveSupplyCollectorBase\DriveSupplyCollectorBase\DriveSupplyCollectorBase.csproj", "{61AE261C-4B2B-426C-A408-B5883A40E1D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DriveSupplyCollectorBase", "DriveSupplyCollectorBase\DriveSupplyCollectorBase\DriveSupplyCollectorBase.csproj", "{61AE261C-4B2B-426C-A408-B5883A40E1D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureBlobSupplyCollectorTests", "AzureBlobSupplyCollectorTests\AzureBlobSupplyCollectorTests.csproj", "{E35C5B65-F31C-46E0-B458-9398E4D49B9C}"
 EndProject
