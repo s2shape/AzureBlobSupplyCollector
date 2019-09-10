@@ -5,16 +5,13 @@ stages:
   - test
 
 variables:
-  GIT_SUBMODULE_STRATEGY: recursive
   AZUREBLOB_CONTAINER: testblob
   AZUREBLOB_ACCOUNT_NAME: devstoreaccount1
   AZUREBLOB_ACCOUNT_KEY: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
   AZUREBLOB_HOST: http://azureblob:10000/devstoreaccount1
 
 before_script:
-  - git submodule sync --recursive
-  - git submodule update --init --recursive
-  - dotnet restore
+  - dotnet restore -s https://www.myget.org/F/s2/ -s https://api.nuget.org/v3/index.json
 
 build:
   stage: build
@@ -29,7 +26,4 @@ test:
 
   script:
     - dotnet build
-    - cd DriveSupplyCollectorBase
-    - dotnet test
-    - cd ..
     - dotnet test
