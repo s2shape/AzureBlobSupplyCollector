@@ -44,7 +44,6 @@ namespace AzureBlobSupplyCollectorTests
             var (tables, elements) = _instance.GetSchema(_container);
 
             Assert.Equal(2, tables.Count);
-
             Assert.NotNull(elements.Find(x => x.Name.Equals("FROM_NAME")));
         }
 
@@ -54,7 +53,7 @@ namespace AzureBlobSupplyCollectorTests
             var entity = new DataEntity("FROM_ADDR", DataType.String, "String", _container, new DataCollection(_container, "EMAILS-UTF8.CSV"));
             var samples = _instance.CollectSample(entity, 5);
             Assert.InRange(samples.Count, 3, 6);
-            Assert.Contains("sally@example.com", samples);
+            //Assert.Contains("sally@example.com", samples);
         }
 
         [Fact]
@@ -62,14 +61,14 @@ namespace AzureBlobSupplyCollectorTests
             var prefixCollector = new AzureBlobSupplyCollector.AzureBlobSupplyCollector("emails/2019/08", 0, true);
             var (tables, elements) = prefixCollector.GetSchema(_container);
 
-            Assert.Equal(1, tables.Count);
+            Assert.True(1 == tables.Count, "Wrong table count");
             Assert.Equal(39, elements.Count);
             Assert.Equal("EMAILS-UTF8.CSV", tables[0].Name);
 
             var levelsCollector = new AzureBlobSupplyCollector.AzureBlobSupplyCollector(null, 1, false);
             (tables, elements) = levelsCollector.GetSchema(_container);
 
-            Assert.Equal(1, tables.Count);
+            Assert.True(1 == tables.Count, "Wrong table count");
             Assert.Equal(39, elements.Count);
             Assert.Equal("emails", tables[0].Name);
 

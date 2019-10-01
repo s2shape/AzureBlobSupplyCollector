@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureBlobSupplyCollector", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureBlobSupplyCollectorTests", "AzureBlobSupplyCollectorTests\AzureBlobSupplyCollectorTests.csproj", "{E35C5B65-F31C-46E0-B458-9398E4D49B9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureBlobSupplyCollectorLoader", "AzureBlobSupplyCollectorLoader\AzureBlobSupplyCollectorLoader.csproj", "{D8E366F5-2158-4EE9-84CB-87C2341BB0FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E35C5B65-F31C-46E0-B458-9398E4D49B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E35C5B65-F31C-46E0-B458-9398E4D49B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E35C5B65-F31C-46E0-B458-9398E4D49B9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8E366F5-2158-4EE9-84CB-87C2341BB0FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8E366F5-2158-4EE9-84CB-87C2341BB0FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8E366F5-2158-4EE9-84CB-87C2341BB0FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8E366F5-2158-4EE9-84CB-87C2341BB0FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

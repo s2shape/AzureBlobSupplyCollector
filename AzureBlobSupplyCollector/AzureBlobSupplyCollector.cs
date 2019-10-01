@@ -19,7 +19,10 @@ namespace AzureBlobSupplyCollector
 
         private const string PREFIX = "azureblob://";
 
-        public AzureBlobSupplyCollector(string s2Prefix = null, int s2FolderLevels = 0, bool s2UseFileNameInDcName = false, bool csvHasHeader = true) : base(s2Prefix, s2FolderLevels, s2UseFileNameInDcName) {
+        public AzureBlobSupplyCollector() : base(null, 0, false) {
+        }
+
+        public AzureBlobSupplyCollector(string s2Prefix, int s2FolderLevels = 0, bool s2UseFileNameInDcName = false, bool csvHasHeader = true) : base(s2Prefix, s2FolderLevels, s2UseFileNameInDcName) {
             this.csvHasHeader = csvHasHeader;
         }
 
